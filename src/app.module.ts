@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { databaseConfig } from './config/database.config';
+import { getDatabaseConfig } from './config/database.config';
 import { CasesModule } from './modules/cases/cases.module';
 
 @Module({
@@ -12,7 +12,10 @@ import { CasesModule } from './modules/cases/cases.module';
       isGlobal: true,
     }),
 
-    TypeOrmModule.forRoot(databaseConfig),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: getDatabaseConfig,
+    }),
 
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
@@ -22,4 +25,4 @@ import { CasesModule } from './modules/cases/cases.module';
     CasesModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

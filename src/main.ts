@@ -13,7 +13,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: 'http://localhost:4200',
-    methods: "POST",
+    methods: "GET, POST, PUT, PATCH, DELETE",
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({
